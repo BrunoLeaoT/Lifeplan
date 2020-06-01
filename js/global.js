@@ -5,10 +5,11 @@ var ano = url.searchParams.get("ano");
 $('#opt').val(id);
 if(id==3) 
   $('#mensalidade').text("Qual a mensalidade da universidade?");
-else if(opt==2)
+else if(id==2)
   $('#mensalidade').text("Qual valor da entrada da casa?");   
 else
   $('#mensalidade').text("Quanto você pretende completar sua renda? "); 
+  
 (function ($) {
     'use strict';
     /*==================================================================
@@ -79,6 +80,27 @@ else
     
 
 })(jQuery);
+
+$("#submitForm").click(function(){
+var ano = $("#ano").val()
+var receber = $("#receber").val()
+console.log("Id: "+ id);
+console.log("ano: "+  (ano -2020));
+console.log("receber: "+ receber);
+$.post("https://yagholc.ocpu.io/insurAPI/R/prevCall/",
+  {
+    b: receber,
+    m: (ano -2020),
+    opt: id
+  },
+  function(data, status){
+    res = "https://cloud.opencpu.org/" + data.split("\n")[0]
+    console.log(res)
+    $.get(res, function(data2, status){
+      window.location.replace("multi/result.html?data="+data2.substr(4)+"&receber="+receber+"&ano="+ano+"&opt="+id);
+    });
+  }); 
+});
 
 $("#submit").click(function(){
   console.log("oie")
